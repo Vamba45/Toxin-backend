@@ -70,15 +70,26 @@ class UserController {
     }
 
     async getRooms(req, res) {
-        const page = req.query.page || 1;
-        const limit = req.query.limit || 12;
+        let page = (req.query.page) || 1;
+        let limit = (req.query.limit) || 12;
 
-        const total = await db.query(`SELECT count(*) FROM rooms`);
-        const rooms = await db.query(`SELECT * FROM rooms LIMIT ${limit} OFFSET ${page}`);
+        const maxPrice = req.query.maxPrice || 100000;
+        const minPrice = req.query.minPrice || 0;
+
+        const total = await db.query(`SELECT count(*) FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice}`);
+
+        
+        console.log(page, total, limit);
+
+        if(Number(page) > Math.ceil(Number(total.rows[0].count) / Number(limit))) {
+            page = '1';
+        }
+
+        const rooms = await db.query(`SELECT * FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} LIMIT ${limit} OFFSET ${page}`);
 
         res.json({
             error: false,
-            total: Number(total.rows[0].count),
+            total: (total.rows[0].count),
             page: Number(page),
             limit: Number(limit),
             rooms: rooms.rows
