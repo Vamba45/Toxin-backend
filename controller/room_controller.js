@@ -76,16 +76,20 @@ class UserController {
         const maxPrice = req.query.maxPrice || 100000;
         const minPrice = req.query.minPrice || 0;
 
-        const total = await db.query(`SELECT count(*) FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice}`);
+        const dayStart = req.query.dayStart || '2024-06-20';
+        const dayEnd = req.query.dayEnd || '2024-06-30';
 
-        
-        console.log(page, total, limit);
+        let totalQuery = `SELECT count(*) FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice}`;
+
+        const total = await db.query(totalQuery);
 
         if(Number(page) > Math.ceil(Number(total.rows[0].count) / Number(limit))) {
             page = '1';
         }
 
-        const rooms = await db.query(`SELECT * FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} LIMIT ${limit} OFFSET ${page}`);
+        let roomsQuery = `SELECT * FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} LIMIT ${limit} OFFSET ${page}`;
+
+        const rooms = await db.query(roomsQuery);
 
         res.json({
             error: false,
