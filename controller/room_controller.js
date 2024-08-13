@@ -76,10 +76,10 @@ class UserController {
         const maxPrice = req.query.maxPrice || 100000;
         const minPrice = req.query.minPrice || 0;
 
-        const dayStart = req.query.dayStart || '2024-06-20';
+        const dayStart = req.query.dayStart || '2024-04-20';
         const dayEnd = req.query.dayEnd || '2024-06-30';
 
-        let totalQuery = `SELECT count(*) FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice}`;
+        let totalQuery = `SELECT count(*) FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} AND daystart >= '${dayStart}' and dayend <= '${dayEnd}'`;
 
         const total = await db.query(totalQuery);
 
@@ -87,7 +87,7 @@ class UserController {
             page = '1';
         }
 
-        let roomsQuery = `SELECT * FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} LIMIT ${limit} OFFSET ${page}`;
+        let roomsQuery = `SELECT * FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} AND daystart >= '${dayStart}' and dayend <= '${dayEnd}' ORDER BY price LIMIT ${limit} OFFSET ${(page - 1) * limit}`; //ORDER BY price LIMIT ${limit} OFFSET ${page}
 
         const rooms = await db.query(roomsQuery);
 
