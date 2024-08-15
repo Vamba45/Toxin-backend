@@ -60,6 +60,7 @@ for(let i = 11; i < 100; i++) {
             comfort[getRandomInt(3, 5)],
             comfort[getRandomInt(6, comfort.length)]
         ]
+        }
     }
     
     const room = await db.query('INSERT INTO rooms (id, number, luxe, reviewCount, beds, bedRooms, bathRooms, adult, children, babies, dayStart, dayEnd, starts, price, photos, comfort) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)', element.id, element.number, element.luxe, element.reviewCount, element.beds, element.bedRooms, element.bathRooms, element.adult, element.children, element.babies, element.dayStart, element.dayEnd, element.stars, element.price, element.photos, element.comfort);

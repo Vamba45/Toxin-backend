@@ -79,7 +79,20 @@ class UserController {
         const dayStart = req.query.dayStart || '2024-04-20';
         const dayEnd = req.query.dayEnd || '2024-06-30';
 
-        let totalQuery = `SELECT count(*) FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} AND daystart >= '${dayStart}' and dayend <= '${dayEnd}'`;
+        //beds=${beds}&adults=${parents}&children=${children}&babies=${babies}&bedrooms=${bedrooms}&bathrooms=${bathrooms}
+        
+        const adult = req.query.adult || 0;
+        const children = req.query.children || 0;
+        const babies = req.query.babies || 0;
+
+        const beds = req.query.beds || 0;
+        const bedrooms = req.query.bedrooms || 0;
+        const bathrooms = req.query.bathrooms || 0;
+
+        let totalQuery = `SELECT count(*) FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} `  + 
+                        `AND daystart >= '${dayStart}' and dayend <= '${dayEnd}' ` + 
+                        `AND beds >= ${beds} AND bedrooms >= ${bedrooms} AND bathrooms >= ${bathrooms} ` + 
+                        `AND adult >= ${adult} AND children >= ${children} AND babies >= ${babies}`;
 
         const total = await db.query(totalQuery);
 
@@ -87,7 +100,10 @@ class UserController {
             page = '1';
         }
 
-        let roomsQuery = `SELECT * FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} AND daystart >= '${dayStart}' and dayend <= '${dayEnd}' ORDER BY price LIMIT ${limit} OFFSET ${(page - 1) * limit}`; //ORDER BY price LIMIT ${limit} OFFSET ${page}
+        let roomsQuery = `SELECT * FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} `  + 
+                        `AND daystart >= '${dayStart}' and dayend <= '${dayEnd}' ` + 
+                        `AND adult >= ${adult} AND children >= ${children} AND babies >= ${babies} ` +
+                        `AND beds >= ${beds} AND bedrooms >= ${bedrooms} AND bathrooms >= ${bathrooms} ORDER BY price LIMIT ${limit} OFFSET ${(page - 1) * limit}`; //ORDER BY price LIMIT ${limit} OFFSET ${page}
 
         const rooms = await db.query(roomsQuery);
 
