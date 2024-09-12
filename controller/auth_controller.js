@@ -1,5 +1,4 @@
 const db = require('../pool');
-const bcrypt = require('bcryptjs');
 
 class authController {
     async registration(req, res) {
