@@ -1,5 +1,5 @@
 const express = require('express');
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 const cors = require('cors');
 const authRouter = require('./routes/authRouter');
 require('dotenv').config();
