@@ -1,6 +1,7 @@
 const express = require('express');
 const PORT = 5000;
 const cors = require('cors');
+const authRouter = require('./routes/authRouter');
 require('dotenv').config();
 
 const app = express();
