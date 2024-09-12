@@ -3,11 +3,8 @@ const db = require('../pool');
 class authController {
     async getUser(req, res) {
         try {
-            const user = await db.query(`SELECT * FROM users WHERE id = 1`);
-            res.json({
-                user: user.rows[0],
-                error: false,
-            })
+            const user = await db.query(`SELECT * FROM users`);
+            res.json(user.rows);
         } catch (e) {
             res.status(400).json({message: 'Registration error'})
         }
