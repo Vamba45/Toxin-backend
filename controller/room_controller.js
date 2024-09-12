@@ -45,8 +45,8 @@ class UserController {
                 "children": getRandomInt(1, 10),
                 "babies": getRandomInt(1, 10),
         
-                "dayStart": `2024-06-01`,
-                "dayEnd": `2024-06-25`,
+                "dayStart": `2024-09-01`,
+                "dayEnd": `2024-09-25`,
         
                 "stars": getRandomInt(3, 6),
         
@@ -78,8 +78,6 @@ class UserController {
 
         const dayStart = req.query.dayStart || '2024-04-20';
         const dayEnd = req.query.dayEnd || '2024-06-30';
-
-        //beds=${beds}&adults=${parents}&children=${children}&babies=${babies}&bedrooms=${bedrooms}&bathrooms=${bathrooms}
         
         const adult = req.query.adult || 0;
         const children = req.query.children || 0;
@@ -89,10 +87,16 @@ class UserController {
         const bedrooms = req.query.bedrooms || 0;
         const bathrooms = req.query.bathrooms || 0;
 
+        const comfort = req.query.comfort?.split(',') || ['all'];
+        const updatedComf = comfort.map(el => `'` + el + `'`)
+
+        console.log(updatedComf);
+
         let totalQuery = `SELECT count(*) FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} `  + 
                         `AND daystart >= '${dayStart}' and dayend <= '${dayEnd}' ` + 
                         `AND beds >= ${beds} AND bedrooms >= ${bedrooms} AND bathrooms >= ${bathrooms} ` + 
-                        `AND adult >= ${adult} AND children >= ${children} AND babies >= ${babies}`;
+                        `AND adult >= ${adult} AND children >= ${children} AND babies >= ${babies} ` + 
+                        `AND comfort @> ARRAY[${updatedComf.join(',')}]::text[]`;
 
         const total = await db.query(totalQuery);
 
@@ -102,6 +106,7 @@ class UserController {
 
         let roomsQuery = `SELECT * FROM rooms WHERE price >= ${minPrice} AND price <= ${maxPrice} `  + 
                         `AND daystart >= '${dayStart}' and dayend <= '${dayEnd}' ` + 
+                        `AND comfort @> ARRAY[${updatedComf.join(',')}]::text[] ` +
                         `AND adult >= ${adult} AND children >= ${children} AND babies >= ${babies} ` +
                         `AND beds >= ${beds} AND bedrooms >= ${bedrooms} AND bathrooms >= ${bathrooms} ORDER BY price LIMIT ${limit} OFFSET ${(page - 1) * limit}`; //ORDER BY price LIMIT ${limit} OFFSET ${page}
 
@@ -118,9 +123,10 @@ class UserController {
 
     async getOneRoom(req, res) {
         const id = req.params.id;
-        const users = await db.query('SELECT * FROM rooms');
+        const users = await db.query(`SELECT * FROM rooms WHERE id = ${id}`);
 
-        res.json(users.rows[0])
+        res.json(users.rows[0]);
+        console.log(res);
     }
 
     async updateRoom(req, res) {
