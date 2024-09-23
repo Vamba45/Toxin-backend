@@ -2,7 +2,6 @@ const Router = require('express');
 const router = new Router();
 const userController = require('../controller/room_controller');
 
-router.post('/rooms', userController.createRoom);
 router.get('/rooms', userController.getRooms);
 router.get('/rooms/:id', userController.getOneRoom);
 router.put('/rooms', userController.updateRoom);
