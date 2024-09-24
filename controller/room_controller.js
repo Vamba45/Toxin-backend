@@ -2,7 +2,7 @@ const db = require('../pool');
 const createRoom = require('../generator');
 
 class UserController {
-    async getRooms(req, res) {
+    async getAllRooms(req, res) {
         let page = (req.query.page) || 1;
         let limit = (req.query.limit) || 12;
 
@@ -43,8 +43,6 @@ class UserController {
 
         const rooms = await db.query(roomsQuery);
 
-        console.log(rooms);
-
         res.json({
             error: false,
             total: (total.rows[0].count),
@@ -61,14 +59,14 @@ class UserController {
         res.json(users.rows[0]);
     }   
 
-    async updateRoom(req, res) {
+    async updateOneRoom(req, res) {
         const rooms = await db.query('SELECT * FROM room');
+
         res.json(rooms.rows[0])
     }
 
-    async deleteRoom(req, res) {
-        const id = req.params.id;
-        const user = await db.query('DELETE FROM room where id = $1', [id]);
+    async deleteAllRooms(req, res) {
+        const user = await db.query('DELETE FROM room where id < 1000');
 
         res.json(user.rows[0])
     }
