@@ -1,4 +1,5 @@
 const db = require('../pool');
+const createRoom = require('../generator');
 
 class UserController {
     async getRooms(req, res) {
@@ -58,7 +59,7 @@ class UserController {
         const users = await db.query(`SELECT * FROM room WHERE id = ${id}`);
 
         res.json(users.rows[0]);
-    }
+    }   
 
     async updateRoom(req, res) {
         const rooms = await db.query('SELECT * FROM room');
@@ -70,6 +71,16 @@ class UserController {
         const user = await db.query('DELETE FROM room where id = $1', [id]);
 
         res.json(user.rows[0])
+    }
+
+    async createRooms(req, res) {
+        const count = req.body.count;
+
+        for(let i = 0; i < count; i++) {
+            let elem = createRoom(); 
+
+                await db.query(`INSERT INTO room (price, daystart, dayend, luxe, stars, reviewcount, beds, bedrooms, bathrooms, adult, children, babies, "number", photos, comfort) VALUES (${elem.price}, '${elem.dayStart}', '${elem.dayEnd}', ${elem.luxe}, ${elem.stars}, ${elem.reviewCount}, ${elem.beds}, ${elem.bedRooms}, ${elem.bathRooms}, ${elem.adult}, ${elem.children}, ${elem.babies}, ${elem.number}, '[${elem.photos.map((el) => `"${el}"`).join(", ")}]', '[${elem.comfort.map((el) => `"${el}"`).join(", ")}]')`);
+        }
     }
 }
 
