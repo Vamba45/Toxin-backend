@@ -23,7 +23,7 @@ class authController {
                 throw new Error();
             }
 
-            await db.query(`INSERT INTO "user" ("password", email, "name", surname, birthdate, gender) VALUES ('${password}', '${email}', '${name}', '${surname}', '${birthdate}', ${gender})`);
+            await db.query(`INSERT INTO "user" ("password", email, "name", surname, datebirth, gender) VALUES ('${password}', '${email}', '${name}', '${surname}', '${birthdate}', ${gender})`);
 
             res.json({message: 'Success'}); 
         } catch(e) {
