@@ -5,6 +5,12 @@ class authController {
         try {
             const {email, password} = req.query;
 
+            if(!password) {
+                const user = await db.query(`SELECT * FROM "user" WHERE email = '${email}'`);
+
+                res.json(user.rowCount > 0);
+            }
+
             const user = await db.query(`SELECT * FROM "user" WHERE email = '${email}' and "password" = '${password}'`);
 
             res.json(user.rows[0]);
