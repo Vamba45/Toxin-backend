@@ -26,7 +26,7 @@ class UserController {
         let totalQuery = `SELECT count(*) FROM room WHERE price >= ${minPrice} AND price <= ${maxPrice} `  + 
                         `AND daystart >= '${dayStart}' and dayend <= '${dayEnd}' ` + 
                         `AND beds >= ${beds} AND bedrooms >= ${bedrooms} AND bathrooms >= ${bathrooms} ` + 
-                        `AND adult >= ${adult} AND children >= ${children} AND babies >= ${babies} ` + 
+                        `AND adult >= ${adult} AND children >= ${children} AND babies >= ${babies} ` +  
                         `${updatedComf ? `AND comfort::jsonb ?& ARRAY[${updatedComf.join(',')}] ` : ' '}`;
 
         const total = await db.query(totalQuery);
