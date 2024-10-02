@@ -47,8 +47,8 @@ function createRoom() {
         "children": getRandomInt(1, 10),
         "babies": getRandomInt(1, 10),
 
-        "dayStart": `2024-09-${getRandomInt(11, 30)}`,
-        "dayEnd": `2024-10-${getRandomInt(11, 30)}`,
+        "dayStart": `2024-10-${getRandomInt(11, 30)}`,
+        "dayEnd": `2024-11-${getRandomInt(11, 30)}`,
 
         "stars": getRandomInt(3, 6),
 
